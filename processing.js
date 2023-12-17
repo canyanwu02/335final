@@ -109,57 +109,91 @@ app.get("/getResult", async (request, response) => {
     response.render("getResult.ejs", { movies: movieDetails });
 });
 
+async function getTVShow(tvShow) {
+  const apiKey = process.env.API_KEY;
+  const url = `https://api.themoviedb.org/3/search/tv?query=${encodeURIComponent(tvShow)}&api_key=${apiKey}`;
+  console.log("URL: ", url);
+
+  try {
+      const response = await axios.get(url);
+      console.log("API Response: ", response.data);
+      const firstTVShow = response.data.results[0]; 
+      return firstTVShow ? [firstTVShow] : []; // returning an array with the first result or an empty array
+  } catch (error) {
+      console.error("Error fetching TV show details:", error.message);
+      return [];
+  }
+}
+
+app.get("/getTV", async (request, response) => {
+  await client.connect();
+  const tvShows = await fetchMedia(client, databaseAndCollectionTVShow);
+
+  const tvShowDetails = await Promise.all(tvShows.map(tv => getTVShow(tv.name)));
+  console.log("TV Show Details: ", tvShowDetails);
+
+  response.render("getTV", { tvShows: tvShowDetails });
+});
 
 
-async function getTrending(movieTitle) {
-    const apiKey = process.env.API_KEY;
-    const url = 'https://api.themoviedb.org/3/trending/movie/day?language=en-US';
-    console.log("URL: ", url); 
 
+
+
+async function getTrending() {
+  const apiKey = process.env.API_KEY;
+  const url = `https://api.themoviedb.org/3/trending/movie/day?api_key=${apiKey}&language=en-US`;
+  console.log("URL: ", url);
+
+  try {
+    const response = await axios.get(url);
+    console.log("API Response: ", response.data);
+    
+    // Get the top 10 trending movies
+    const trendingMovies = response.data.results.slice(0, 10);
+
+    return trendingMovies.length > 0 ? trendingMovies : [];
+} catch (error) {
+    console.error("Error fetching trending movies:", error.message);
+    return [];
+}
+
+}
+
+app.get("/getTrending", async (request, response) => {
+  try {
+      const results = await getTrending();
+
+      // Create a table of movies with the title
+      const movieTable = results.map(movie => ({
+          id: movie.id,
+          title: movie.title,
+          release_date: movie.release_date,
+          overview: movie.overview,
+          poster_path: movie.poster_path,
+      }));
+
+      // Return the movie table as JSON or render a template
+      response.render("getTrending", { movieTable });
+  } catch (error) {
+      console.error("Error fetching trending movie data:", error.message);
+      response.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+  /* get rid of all info*/
+
+async function deleteMedia(client, databaseAndCollection) {
     try {
-        const response = await axios.get(url);
-        console.log("API Response: ", response.data); 
-        const movieDetails = response.data.results;
-        return movieDetails;
-    } catch (error) {
-        console.error("Error fetching movie details:", error.message);
-        return [];
+        await client.connect();
+        const collection = client.db(databaseAndCollection.db).collection(databaseAndCollection.collection);
+        await collection.deleteMany({});
+    } finally {
+        await client.close();
     }
 }
 
 
-
-app.get("/getTrending", async (request, response) => {
-
-    try {
-      const movieTitle = request.query.title;
-
-      const results = await getTrending(movieTitle);
-
-      // Create a table of movies with the title
-      const movieTable = results.map(movie => ({
-        id: movie.id,
-        title: movie.title,
-        release_date: movie.release_date,
-        overview: movie.overview,
-        poster_path: movie.poster_path,
-        // Add more fields as needed
-      }));
-  
-      // Return the movie table as JSON
-      //response.json(movieTable);
-      response.render("getTrending", { movieTable });
-
-    } catch (error) {
-      console.error("Error fetching movie data:", error.message);
-      response.status(500).json({ error: "Internal Server Error" });
-    }
-  });
-
-  /* get rid of all info*/
-
-
-  app.get("/remove", (request, response) => {
+app.get("/remove", (request, response) => {
     const vars = { 
         port: `http://localhost:${portNumber}/remove`
     }
@@ -167,12 +201,11 @@ app.get("/getTrending", async (request, response) => {
 });
 
 app.post("/remove", async (request, response) => {
-    await client.connect();
-    await client.db(databaseAndCollection.db)
-    .collection(databaseAndCollection.collection).deleteMany({});
-    
-    await client.close();
-    response.render("removalConfirm");
+  
+  await deleteMedia(client, databaseAndCollectionMovie);
+  await deleteMedia(client, databaseAndCollectionTVShow);
+
+  response.render("removalConfirm");
 });
 
 
