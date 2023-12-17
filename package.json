@@ -5,5 +5,9 @@
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "mongodb": "^6.3.0"
+  },
+  "scripts": {
+    "start": "node processing.js 4001",
+    "build": "echo 'No build setup' "
   }
 }
