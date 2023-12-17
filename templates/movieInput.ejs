@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>Movie Input</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+	<h1>Movies</h1>
+    <p>Directions: Fill in the name of the Movie. <br>
+        Genre is not required but helps make a better recomendation, then click submit.</p>
+    <form action="/movieInput" method="post">
+        <fieldset>
+            <b>Movie Name: </b><input type="text" name="name" id="name">
+            <br><br>
+            <b>Genre: </b><input type="text" name="genre" id="genre">
+        </fieldset>
+        <br>
+        <input type="reset" value="Reset">
+        <input type="submit" value="Submit">
+    </form>
+	<hr>
+</body>
+
+</html>
+

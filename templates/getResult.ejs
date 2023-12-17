@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Result</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>Here's your result!!!</h1><br>
+    <% movies.forEach(movieArray => { %>
+        <% movieArray.forEach(movie => { %>
+            <div>
+                <h2><%= movie.title %></h2>
+                <p>Original Title: <%= movie.original_title %></p>
+                <p>Genres: <%= movie.genre_ids.join(', ') %></p> 
+                <p>Tagline: <%= movie.tagline %></p>
+                <p>Runtime: <%= movie.runtime %> minutes</p>
+                <p>Language: <%= movie.original_language %></p>
+                <p>Budget: $<%= movie.budget %></p>
+                <p>Revenue: $<%= movie.revenue %></p>
+                <p>Release Date: <%= movie.release_date %></p>
+                <p>Rating: <%= movie.vote_average %> (Votes: <%= movie.vote_count %>)</p>
+                <p>Popularity Score: <%= movie.popularity %></p>
+                <p>IMDb ID: <%= movie.imdb_id %></p>
+                <p>Plot Summary: <%= movie.overview %></p>
+                <% if (movie.poster_path) { %>
+                    <img src="https://image.tmdb.org/t/p/w500<%= movie.poster_path %>" alt="<%= movie.title %> Poster">
+                <% } else { %>
+                    <p>No image available</p>
+                <% } %>
+            </div>
+        <% }); %>
+    <% }); %>
+</body>
+</html>
+
+

@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Vinyl&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap');
+
+body {
+    font-family: 'Bubblegum Sans', cursive;
+    background-color: #e3b9b9;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+.movie-container {
+    background-color: #d75b5b;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.movie-container h2 {
+    color: #333;
+    margin-top: 0;
+}
+
+.movie-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.movie-details {
+    margin-top: 15px;
+}
+
+.movie-details p {
+    margin-bottom: 10px;
+    color: #666;
+}
+
+header {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    size: 40px;
+}
+
+
+ 
+#title{
+    font-family: 'Rubik Vinyl', cursive ;
+    font-size: 50pt;
+    color: white;
+    background-color: white;
+    border: 10px solid black;
+    text-align: center;
+    height : 8rem;
+    width : 75rem;
+    margin: auto;
+
+}

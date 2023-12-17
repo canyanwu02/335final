@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>Removal</title>
+	<link rel="stylesheet" href="/style.css">
+
+</head>
+
+<body>
+	<h1>Remove All Applicants</h1>
+	<form action="<%- port %>" method="post">
+        <input type="submit" value="Remove all applicants" name="submit"/>
+	</form>
+    
+
+    <hr>
+	<a href="/">HOME</a>
+
+    <script>
+
+        window.onsubmit = () => confirm("Are you sure you want to remove all applicants?");
+
+    </script>
+</body>
+
+</html>
